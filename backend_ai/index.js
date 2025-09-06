@@ -8,7 +8,6 @@ dotenv.config();
 const app = express();
 
 const PORT = process.env.PORT || 4000;
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "*";
 const FRONTEND_BUILD_DIR =
   process.env.FRONTEND_BUILD_DIR ||
   (fs.existsSync(path.join(__dirname, "dist")) ? "dist" : "build");
@@ -18,7 +17,6 @@ require("./conn");
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-
 
 const uploadsPath = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsPath)) fs.mkdirSync(uploadsPath, { recursive: true });
@@ -55,7 +53,6 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`Backend is running on port ${PORT}`);
-  console.log(`CORS origin: ${CLIENT_ORIGIN}`);
   console.log(
     fs.existsSync(staticRoot)
       ? `Serving frontend from ./${FRONTEND_BUILD_DIR}`
