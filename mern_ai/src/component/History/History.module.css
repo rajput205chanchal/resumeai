@@ -1,0 +1,35 @@
+.History {
+    flex: 0.8;
+    height: 100vh;
+    overflow: auto;
+    padding: 50px;
+    background-color: whitesmoke;
+    box-sizing: border-box;
+}
+
+.HistoryCardBlock {
+    width: 100%;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr 1fr ;
+}
+
+.HistoryCard {
+    width: 100%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.cardPercentage {
+    font-size: 34px;
+    text-align: center;
+}
+
+@media screen and (max-width:780px) {
+    .HistoryCardBlock {
+        
+        grid-template-columns: 1fr ;
+    }
+}
