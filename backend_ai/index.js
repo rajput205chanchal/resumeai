@@ -8,7 +8,7 @@ dotenv.config();
 const app = express();
 
 const PORT = process.env.PORT || 4000;
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || '*';
 const FRONTEND_BUILD_DIR =
   process.env.FRONTEND_BUILD_DIR ||
   (fs.existsSync(path.join(__dirname, 'dist')) ? 'dist' : 'build');
