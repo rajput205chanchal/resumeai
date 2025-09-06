@@ -1,28 +1,35 @@
 const mongoose = require('mongoose');
 
-const ResumeSchema = new mongoose.Schema({
+const ResumeSchema = new mongoose.Schema(
+  {
     user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"user",
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+      index: true,
     },
-    resume_name:{
-        type: String,
-        required: true
+    resume_name: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    job_desc:{
-        type: String,
-        required: true
+    job_desc: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    score:{
-        type: String,
-        
+    score: {
+      type: Number, 
+      min: 0,
+      max: 100,
     },
-    feedback:{
-        type: String,
+    feedback: {
+      type: String,
+      trim: true,
     },
-},{timestamps:true});
+    resume_text: { type: String },
+  },
+  { timestamps: true }
+);
 
-
-const resumeModel = mongoose.model("resume",ResumeSchema);
-module.exports = resumeModel;
+module.exports = mongoose.model('resume', ResumeSchema);

@@ -1,29 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import SideBar from './component/SideBar/SideBar'
-import {Routes,Route} from 'react-router-dom';
-import Dashboard from './component/Dashboard/Dashboard'
-import History from './component/History/History'
-import Admin from './component/Admin/Admin'
-import Login from './component/Login/Login'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Navbar from './components/Navbar.jsx';
+import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
+import UploadResume from './pages/UploadResume.jsx';
+import MyResumes from './pages/MyResumes.jsx';
+import AdminResumes from './pages/AdminResumes.jsx';
+import ResumeDetail from './pages/ResumeDetail.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import RoleGuard from './components/RoleGuard.jsx';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <div className='App'>
-      <SideBar />
-      <Routes>
-        <Route path='/' element={<Login />}/>
-        <Route path='/dashboard' element={<Dashboard/>} />
-        <Route path='/history' element={<History />} />
-        <Route path='/admin' element={<Admin />} />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-gray-900">
+      <Navbar />
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        <Routes>
+          <Route path="/" element={<Navigate to="/resumes/mine" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-      </Routes>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/upload" element={<UploadResume />} />
+            <Route path="/resumes/mine" element={<MyResumes />} />
+            <Route path="/resumes/:id" element={<ResumeDetail />} />
+
+            <Route element={<RoleGuard roles={['ADMIN','RECRUITER']} />}>
+              <Route path="/admin/resumes" element={<AdminResumes />} />
+            </Route>
+          </Route>
+
+          <Route path="*" element={<div className="p-8">Not found</div>} />
+        </Routes>
+      </div>
     </div>
-  )
+  );
 }
-
-export default App
