@@ -16,7 +16,31 @@ require("./conn");
 
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+const cors = require("cors");
+
+const allowedOrigins = [
+  "http://localhost:5173", 
+  "http://127.0.0.1:5173", 
+  "https://resume-cv-ai.netlify.app", 
+  "https://resumeai-f81w.onrender.com", 
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); 
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(
+        new Error("CORS not allowed from this origin: " + origin),
+        false
+      );
+    },
+    credentials: true,
+  })
+);
+
 
 const uploadsPath = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsPath)) fs.mkdirSync(uploadsPath, { recursive: true });
