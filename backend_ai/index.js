@@ -8,7 +8,6 @@ dotenv.config();
 const app = express();
 
 const PORT = process.env.PORT || 4000;
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:5173";
 const FRONTEND_BUILD_DIR =
   process.env.FRONTEND_BUILD_DIR ||
   (fs.existsSync(path.join(__dirname, "dist")) ? "dist" : "build");
@@ -17,12 +16,29 @@ require("./conn");
 
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
+const allowedOrigins = [
+  "http://localhost:5173", 
+  "http://127.0.0.1:5173", 
+  "https://resume-cv-ai.netlify.app", 
+  "https://resumeai-f81w.onrender.com", 
+];
+
 app.use(
   cors({
-    origin: CLIENT_ORIGIN,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); 
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(
+        new Error("CORS not allowed from this origin: " + origin),
+        false
+      );
+    },
     credentials: true,
   })
 );
+
 
 const uploadsPath = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsPath)) fs.mkdirSync(uploadsPath, { recursive: true });
@@ -34,11 +50,14 @@ const ResumeRoutes = require("./Routes/resume");
 
 app.use("/api/user", UserRoutes);
 app.use("/api/resume", ResumeRoutes);
-app.use("/", (req, res) => {
-  if (req.path === "/api" || req.path === "/") {
-    return res.json({ message: "API is running" });
-  }
-});
+
+const staticRoot = path.join(__dirname, FRONTEND_BUILD_DIR);
+if (fs.existsSync(staticRoot)) {
+  app.use(express.static(staticRoot));
+  app.get(/^(?!\/api\/).*/, (req, res) => {
+    res.sendFile(path.join(staticRoot, "index.html"));
+  });
+}
 
 app.use((req, res, next) => {
   if (req.path.startsWith("/api/")) {
@@ -56,6 +75,10 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`Backend is running on port ${PORT}`);
-  console.log(`CORS origin: ${CLIENT_ORIGIN}`);
+  console.log(
+    fs.existsSync(staticRoot)
+      ? `Serving frontend from ./${FRONTEND_BUILD_DIR}`
+      : `No frontend folder found to serve`
+  );
   console.log("Static uploads: /uploads/*");
 });
