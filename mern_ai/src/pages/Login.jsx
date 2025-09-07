@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
+import { FiLogIn } from "react-icons/fi";
 import api from "../utils/api";
 import { useAuth } from "../state/AuthContext";
 import toast from "react-hot-toast";
@@ -31,12 +32,17 @@ export default function Login() {
   return (
     <div className="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-100">
       <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">Welcome Back</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-2">
+          <FiLogIn /> 
+          Welcome Back
+        </h1>
         <p className="text-gray-600">Sign in to your account</p>
       </div>
       <form className="space-y-4" onSubmit={onSubmit}>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Email
+          </label>
           <input
             className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             placeholder="Enter your email"
@@ -46,7 +52,9 @@ export default function Login() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Password
+          </label>
           <input
             className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             placeholder="Enter your password"
@@ -62,10 +70,17 @@ export default function Login() {
           {loading ? "Signing in..." : "Sign in"}
         </button>
       </form>
-      {loading && <div className="mt-4"><Spinner /></div>}
+      {loading && (
+        <div className="mt-4">
+          <Spinner />
+        </div>
+      )}
       <p className="mt-6 text-center text-sm text-gray-600">
         No account?{" "}
-        <Link className="text-blue-600 hover:text-blue-700 font-medium underline" to="/register">
+        <Link
+          className="text-blue-600 hover:text-blue-700 font-medium underline"
+          to="/register"
+        >
           Create one here
         </Link>
       </p>
