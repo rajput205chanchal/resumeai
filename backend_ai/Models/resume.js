@@ -19,7 +19,7 @@ const ResumeSchema = new mongoose.Schema(
       trim: true,
     },
     score: {
-      type: Number, 
+      type: Number,
       min: 0,
       max: 100,
     },
@@ -28,6 +28,20 @@ const ResumeSchema = new mongoose.Schema(
       trim: true,
     },
     resume_text: { type: String },
+    // Versioning fields
+    version: {
+      type: Number,
+      default: 1,
+    },
+    parentResume: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'resume',
+      default: null,
+    },
+    isLatest: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );

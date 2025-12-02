@@ -4,6 +4,7 @@ import api from "../utils/api";
 import { useAuth } from "../state/AuthContext";
 import toast from "react-hot-toast";
 import Spinner from "../components/Spinner";
+console.log(import.meta.env.VITE_API_BASE);
 
 export default function Register() {
   const { login } = useAuth();
@@ -24,7 +25,11 @@ export default function Register() {
       login(data.token, data.user);
       toast.success("Account created");
       nav("/resumes/mine", { replace: true });
-    } catch {
+    } catch (error) {
+      console.log(error.message);
+      toast.error(
+        error.response?.data?.error || "Registration failed. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -33,12 +38,16 @@ export default function Register() {
   return (
     <div className="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-100">
       <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">Create Account</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">
+          Create Account
+        </h1>
         <p className="text-gray-600">Sign up to get started</p>
       </div>
       <form className="space-y-4" onSubmit={onSubmit}>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Name
+          </label>
           <input
             className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             placeholder="Enter your full name"
@@ -47,7 +56,9 @@ export default function Register() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Email
+          </label>
           <input
             className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             placeholder="Enter your email"
@@ -57,7 +68,9 @@ export default function Register() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Password
+          </label>
           <input
             className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             placeholder="Enter your password"
@@ -67,7 +80,9 @@ export default function Register() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Role
+          </label>
           <select
             className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             value={form.role}
@@ -85,10 +100,17 @@ export default function Register() {
           {loading ? "Creating..." : "Create account"}
         </button>
       </form>
-      {loading && <div className="mt-4"><Spinner /></div>}
+      {loading && (
+        <div className="mt-4">
+          <Spinner />
+        </div>
+      )}
       <p className="mt-6 text-center text-sm text-gray-600">
         Have an account?{" "}
-        <Link className="text-blue-600 hover:text-blue-700 font-medium underline" to="/login">
+        <Link
+          className="text-blue-600 hover:text-blue-700 font-medium underline"
+          to="/login"
+        >
           Login
         </Link>
       </p>

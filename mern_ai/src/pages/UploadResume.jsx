@@ -24,7 +24,8 @@ export default function UploadResume() {
       setName("");
       setJD("");
       setFile(null);
-    } catch {
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Upload failed. Please try again.");
     } finally {
       setLoading(false);
     }
